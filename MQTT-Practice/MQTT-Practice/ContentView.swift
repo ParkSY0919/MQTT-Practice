@@ -8,14 +8,39 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject private var mqttManager = MQTTManager()
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationView {
+            VStack(spacing: 20) {
+                Text("MQTT Practice App")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                
+                Text("Connection Status:")
+                    .font(.headline)
+                
+                Text(mqttManager.connectionStatus)
+                    .foregroundColor(mqttManager.isConnected ? .green : .red)
+                
+                Button(action: {
+                    if mqttManager.isConnected {
+                        mqttManager.disconnect()
+                    } else {
+                        mqttManager.connect()
+                    }
+                }) {
+                    Text(mqttManager.isConnected ? "Disconnect" : "Connect")
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(mqttManager.isConnected ? Color.red : Color.blue)
+                        .cornerRadius(10)
+                }
+                
+                Spacer()
+            }
+            .padding()
         }
-        .padding()
     }
 }
 
